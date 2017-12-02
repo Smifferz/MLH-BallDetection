@@ -10,7 +10,6 @@ mpl.rcParams['legend.fontsize'] = 10
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
-
 # Set up the plot
 g1, = plt.plot([] ,[], [])
 
@@ -18,14 +17,12 @@ g1, = plt.plot([] ,[], [])
 plt.axis([0, 600, 0, 400])
 
 ax.set_zlim(0, 400)
+z = []
 
 
 def update_line(g1, x, y, z):
-    g1.set_xdata(np.append(g1.get_xdata(), float(x)))
-    g1.set_ydata(np.append(g1.get_ydata(), float(y)))
-    # g1.set_data(float(x), float(y))
-    g1.set_3d_properties(zs=z)
-    plt.draw()
+    ax.scatter(float(x),float(y),float(z),c='r', marker='_')
+    
 
 with open('data.csv', 'rt') as csvfile:
     filereader = csv.reader(csvfile, delimiter = ' ')
@@ -40,7 +37,7 @@ with open('data.csv', 'rt') as csvfile:
         y = row[0]
         z = y
         update_line(g1, x, y, z)
-        # counter+=10
+        counter+=10
         plt.pause(0.05)
 
 
