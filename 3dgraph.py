@@ -18,9 +18,13 @@ plt.axis([0, 600, 0, 400])
 
 ax.set_zlim(0, 400)
 
+line_x = []
+line_y = []
+line_z = []
+
 
 def update_line(g1, x, y, z):
-    ax.scatter(float(x),float(y),float(z),c='r', marker='_')
+    ax.scatter(float(x),float(y),float(z),c='r', marker='o')
     
 def update_sphere(counter, u, v, x, y, z):
     spherex = float(x) + (10 * np.outer(np.cos(u), np.sin(v)))
@@ -32,6 +36,12 @@ def update_sphere(counter, u, v, x, y, z):
 def create_sphere(x,y,z):
     sphere = ax.plot_surface(x,y,z,rstride=4, cstride=4, color='b', linewidth=0, alpha=0.5)
     return sphere
+
+def create_line(x,y,z):
+    line_x.append(float(x))
+    line_y.append(float(y))
+    line_z.append(float(z))
+    return ax.plot(line_x, line_y, line_z, c='b')
 
 with open('data.csv', 'rt') as csvfile:
     filereader = csv.reader(csvfile, delimiter = ' ')
@@ -50,9 +60,12 @@ with open('data.csv', 'rt') as csvfile:
         update_line(g1, x, y, z)
         if counter == 0:
             surface = update_sphere(counter, u, v, x, y, z)
+            line = create_line(x,y,z)
         else:
             surface.remove()
+            line.pop(0).remove()
             surface = update_sphere(counter,u,v, x, y, z)
+            line = create_line(x, y, z)
         counter+=10
         plt.pause(0.05)
 
